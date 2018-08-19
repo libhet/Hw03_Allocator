@@ -132,5 +132,5 @@ namespace my {
         typename Node::node_pointer m_head = nullptr;
         allocator_type              m_allocator;
     };
-};
+}
 #endif //ALLOCATOR_V_2_MY_LIST_H
