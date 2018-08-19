@@ -1,4 +1,4 @@
-#if(BUILD_TESTING)
+if(BUILD_TESTING)
 
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
@@ -18,4 +18,4 @@ set_target_properties(test_allocator PROPERTIES
 target_link_libraries(test_allocator ${Boost_LIBRARIES})
 
 add_test(TEST_ALLOCATOR test_allocator)
-#endif()
+endif()

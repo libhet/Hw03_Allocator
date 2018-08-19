@@ -30,3 +30,5 @@ set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
 set(CPACK_PACKAGE_CONTACT shadow.balz@mail.ru)
 
 include(CPack)
+
+enable_testing()
