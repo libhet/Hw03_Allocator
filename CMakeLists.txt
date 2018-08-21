@@ -23,9 +23,6 @@ set_target_properties(allocator PROPERTIES
         COMPILE_OPTIONS -Wpedantic -Wall -Wextra
         )
 
-enable_testing()
-add_subdirectory(tests)
-
 install(TARGETS allocator RUNTIME DESTINATION bin)
 
 set(CPACK_GENERATOR DEB)
@@ -37,4 +34,8 @@ set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
 set(CPACK_PACKAGE_CONTACT shadow.balz@mail.ru)
 
 include(CPack)
+
+include(CTest)
+enable_testing()
+add_subdirectory(tests)
 

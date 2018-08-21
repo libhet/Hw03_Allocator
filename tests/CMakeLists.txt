@@ -1,5 +1,7 @@
 if(BUILD_TESTING)
 
+project(test)
+
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
 add_executable(
@@ -17,5 +19,5 @@ set_target_properties(test_allocator PROPERTIES
 
 target_link_libraries(test_allocator ${Boost_LIBRARIES})
 
-add_test(TEST_ALLOCATOR test_allocator)
+add_test(NAME TEST_ALLOCATOR COMMAND test_allocator --list_content)
 endif()
