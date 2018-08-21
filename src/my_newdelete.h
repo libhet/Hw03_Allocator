@@ -6,6 +6,7 @@
 namespace my {
 
     extern std::size_t alloc_counter;
+    extern bool malloc_debug_output;
     void* malloc(std::size_t size) throw (std::bad_alloc);
     void free(void* p) noexcept;
 

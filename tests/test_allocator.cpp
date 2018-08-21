@@ -11,6 +11,7 @@
 #include <list>
 #include <map>
 #include <iterator>
+#include <chrono>
 
 #include "../src/my_list.h"
 
@@ -206,6 +207,7 @@ BOOST_AUTO_TEST_SUITE(MyContainer)
 BOOST_AUTO_TEST_SUITE_END()
 
 BOOST_AUTO_TEST_SUITE(MemoryLeaksMyAlloc)
+
     BOOST_AUTO_TEST_CASE(std_list) {
         size_t alloc_before, alloc_after;
         alloc_before = my::alloc_counter;
@@ -239,4 +241,45 @@ BOOST_AUTO_TEST_SUITE(MemoryLeaksMyAlloc)
         alloc_after  = my::alloc_counter;
         BOOST_CHECK(alloc_before == alloc_after);
     }
+
+BOOST_AUTO_TEST_SUITE_END()
+
+BOOST_AUTO_TEST_SUITE(PerformanceTest)
+// Adding 10000000 elements
+
+    BOOST_AUTO_TEST_CASE(TimeTest) {
+
+        size_t SIZE = 1000000;
+        auto gen = [i = 0]()mutable{return std::make_pair(int(++i), int(2*i));};
+
+        my::malloc_debug_output = false;
+
+        std::chrono::duration<double, std::milli> std_map_duration;
+        std::chrono::duration<double, std::milli> my_map_duration;
+
+        {
+            std::map<int, int> map;
+            auto begin = std::chrono::high_resolution_clock::now();
+            std::generate_n(std::inserter(map,std::begin(map)), SIZE, gen);
+            auto end = std::chrono::high_resolution_clock::now();
+            std_map_duration = end - begin;
+        }
+
+        {
+            std::map<int, int, std::less<>,  my::allocator<int,100>> map;
+            auto begin = std::chrono::high_resolution_clock::now();
+            std::generate_n(std::inserter(map,std::begin(map)), SIZE, gen);
+            auto end = std::chrono::high_resolution_clock::now();
+            my_map_duration = end - begin;
+        }
+
+        std::cout << "STD ALLOCATOR: " << std_map_duration.count() << " us" << std::endl;
+        std::cout << "MY  ALLOCATOR: " << my_map_duration.count() << " us" << std::endl;
+
+        my::malloc_debug_output = true;
+
+        BOOST_CHECK(my_map_duration.count() < std_map_duration.count());
+    }
+
+
 BOOST_AUTO_TEST_SUITE_END()
